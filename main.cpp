@@ -1,13 +1,17 @@
+// Importing iostream and fstream
 #include <iostream>
-// This is the skeleton of a future cpp project
-// It's to be a lightweight contacts database
-// I'm working the next 5 days, so I'll be adding bits and pieces here and there
+#include <fstream>
 
+// Importing 3rd party JSON library from https://json.nlohmann.me/
+#include <json.hpp>
+using json = nlohmann::json;
+
+using namespace std;
 
 // MyPhonebook Class
 class MyPhoneBook {
 public:
-    int phoneNum{};
+    std::string phoneNum;
     std::string contactName;
 };
 
@@ -17,25 +21,35 @@ void findContact() {
     MyPhoneBook person;
     std::cout << "Enter name:";
     std::cin >> person.contactName;
-
-//    std::cout << "findContact function works\n" << std::endl;
 }
 
 // Add Contact Function
 void addContact() {
     // Testing function
+    // Creation of person object from MyPhoneBook class
     MyPhoneBook person;
+
+    // Entering new contact name & saving to variable
     std::cout << "Enter new contact name:\n";
     std::cin >> person.contactName;
     std::string newContact = person.contactName;
+
+    // Entering new contact number & saving to variable
     std::cout << "Enter new number (without spaces):\n";
     std::cin >> person.phoneNum;
-    int newNum = person.phoneNum;
+    std::string newNum = person.phoneNum;
+
+    // Creation of json object
+    json contact = {newContact, newNum};
+    // Writing to file
+    std::ofstream file("db.json");
+    file << std::setw(4) << contact << std::endl;
+    file.close();
+    // The problem here is that every new entry overwrites the previous entry
+
 
     std::cout << newContact << std::endl;
     std::cout << newNum << std::endl;
-    // Need to create a db to store numbers
-//    std::cout << "addContact function works\n" << std::endl;
 }
 
 // Delete Contact Function
@@ -46,6 +60,7 @@ void delContact() {
 
 // Main Function
 int main() {
+    // encapsulating main() logic within a while loop to create CLI menu
     int menu = 0;
     while (menu < 1) {
         // Output to user
